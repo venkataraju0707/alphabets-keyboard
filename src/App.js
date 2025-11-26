@@ -1,14 +1,11 @@
 import React, { useState, useEffect } from "react";
 
-// ✅ letters moved outside to fix Netlify ESLint CI error
-const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
+ const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
 
 export default function App() {
   const [text, setText] = useState("");
 
-  // -------------------------------------------
-  // Keyboard typing support (A–Z + Backspace)
-  // -------------------------------------------
+  
   useEffect(() => {
     const handleKey = (e) => {
       const key = e.key.toUpperCase();
@@ -24,18 +21,14 @@ export default function App() {
 
     window.addEventListener("keydown", handleKey);
     return () => window.removeEventListener("keydown", handleKey);
-  }, []); // safe because letters is stable outside
+  }, []);  
 
-  // -------------------------------------------
-  // Add clicked letter
-  // -------------------------------------------
+  
   const addLetter = (letter) => {
     setText((prev) => prev + letter);
   };
 
-  // -------------------------------------------
-  // Backspace
-  // -------------------------------------------
+  
   const handleBackspace = () => {
     setText((prev) => prev.slice(0, -1));
   };
@@ -53,22 +46,22 @@ export default function App() {
         placeholder="Your text will appear here..."
         readOnly
         style={styles.input}
-        data-testid="output-area" // required for test case 1
+        data-testid="output-area" 
       />
 
-      {/* Backspace Button */}
+      
       <button style={styles.backspace} onClick={handleBackspace}>
         Backspace
       </button>
 
-      {/* Alphabet Buttons */}
+       
       <div style={styles.buttonsContainer}>
         {letters.map((letter) => (
           <button
             key={letter}
             onClick={() => addLetter(letter)}
             style={styles.letterButton}
-            data-testid="alphabet-button" // required for test case 2
+            data-testid="alphabet-button"  
           >
             {letter}
           </button>
@@ -78,9 +71,7 @@ export default function App() {
   );
 }
 
-// -------------------------------------------------------
-// INLINE CSS (matches screenshot & passes Cypress tests)
-// -------------------------------------------------------
+ 
 const styles = {
   container: {
     textAlign: "center",
