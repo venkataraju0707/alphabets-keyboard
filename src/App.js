@@ -1,12 +1,15 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+
+// ✅ letters moved outside to fix Netlify ESLint CI error
+const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
 
 export default function App() {
   const [text, setText] = useState("");
 
-  const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
-
-  
-  React.useEffect(() => {
+  // -------------------------------------------
+  // Keyboard typing support (A–Z + Backspace)
+  // -------------------------------------------
+  useEffect(() => {
     const handleKey = (e) => {
       const key = e.key.toUpperCase();
 
@@ -21,43 +24,53 @@ export default function App() {
 
     window.addEventListener("keydown", handleKey);
     return () => window.removeEventListener("keydown", handleKey);
-  }, []);
+  }, []); // safe because letters is stable outside
+
+  // -------------------------------------------
+  // Add clicked letter
+  // -------------------------------------------
+  const addLetter = (letter) => {
+    setText((prev) => prev + letter);
+  };
+
+  // -------------------------------------------
+  // Backspace
+  // -------------------------------------------
+  const handleBackspace = () => {
+    setText((prev) => prev.slice(0, -1));
+  };
 
   return (
     <div style={styles.container}>
-      
       <h1 style={styles.title}>Alphabet Buttons</h1>
-
-      
       <p style={styles.subtitle}>
         Click letters (or use your keyboard) to build text.
       </p>
 
-      
       <input
+        type="text"
         value={text}
-        readOnly
         placeholder="Your text will appear here..."
+        readOnly
         style={styles.input}
+        data-testid="output-area" // required for test case 1
       />
 
-      
-      <button
-        style={styles.backspace}
-        onClick={() => setText((prev) => prev.slice(0, -1))}
-      >
+      {/* Backspace Button */}
+      <button style={styles.backspace} onClick={handleBackspace}>
         Backspace
       </button>
 
-      
-      <div style={styles.grid}>
-        {letters.map((l) => (
+      {/* Alphabet Buttons */}
+      <div style={styles.buttonsContainer}>
+        {letters.map((letter) => (
           <button
-            key={l}
-            style={styles.letterBtn}
-            onClick={() => setText((prev) => prev + l)}
+            key={letter}
+            onClick={() => addLetter(letter)}
+            style={styles.letterButton}
+            data-testid="alphabet-button" // required for test case 2
           >
-            {l}
+            {letter}
           </button>
         ))}
       </div>
@@ -65,55 +78,55 @@ export default function App() {
   );
 }
 
+// -------------------------------------------------------
+// INLINE CSS (matches screenshot & passes Cypress tests)
+// -------------------------------------------------------
 const styles = {
   container: {
     textAlign: "center",
     padding: "40px",
-    background: "#f8f9fc",
-    minHeight: "100vh",
     fontFamily: "Arial, sans-serif",
   },
   title: {
-    fontSize: "34px",
+    fontSize: "36px",
     fontWeight: "bold",
-    marginBottom: "5px",
   },
   subtitle: {
     fontSize: "16px",
     color: "#555",
-    marginBottom: "25px",
   },
   input: {
-    width: "90%",
-    padding: "15px",
+    width: "80%",
+    padding: "14px",
     fontSize: "18px",
-    borderRadius: "10px",
+    marginTop: "20px",
+    borderRadius: "8px",
     border: "1px solid #ccc",
-    marginBottom: "20px",
   },
   backspace: {
-    padding: "10px 20px",
-    fontSize: "16px",
+    marginTop: "20px",
+    marginBottom: "20px",
+    padding: "10px 16px",
+    fontSize: "15px",
     borderRadius: "8px",
-    border: "none",
-    background: "#e6e6e6",
     cursor: "pointer",
-    marginBottom: "30px",
   },
-  grid: {
-    display: "grid",
-    gridTemplateColumns: "repeat(13, 1fr)",
+  buttonsContainer: {
+    display: "flex",
+    flexWrap: "wrap",
+    width: "80%",
+    justifyContent: "center",
+    margin: "20px auto",
     gap: "15px",
-    padding: "0 40px",
   },
-  letterBtn: {
-    padding: "15px",
-    background: "white",
-    borderRadius: "12px",
-    border: "1px solid #ddd",
-    fontSize: "20px",
-    fontWeight: "bold",
+  letterButton: {
+    padding: "18px 22px",
+    fontSize: "18px",
+    border: "1px solid #ccc",
+    borderRadius: "10px",
     cursor: "pointer",
-    boxShadow: "0 2px 6px rgba(0, 0, 0, 0.1)",
+    width: "60px",
+    textAlign: "center",
+    background: "white",
   },
 };
