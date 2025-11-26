@@ -1,17 +1,16 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState } from "react";
 
 export default function App() {
   const [text, setText] = useState("");
 
   const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
 
-   const lettersRef = useRef(letters);
-
-  useEffect(() => {
+  
+  React.useEffect(() => {
     const handleKey = (e) => {
       const key = e.key.toUpperCase();
 
-      if (lettersRef.current.includes(key)) {
+      if (letters.includes(key)) {
         setText((prev) => prev + key);
       }
 
@@ -22,21 +21,27 @@ export default function App() {
 
     window.addEventListener("keydown", handleKey);
     return () => window.removeEventListener("keydown", handleKey);
-  }, []);  
+  }, []);
+
   return (
     <div style={styles.container}>
+      
       <h1 style={styles.title}>Alphabet Buttons</h1>
+
+      
       <p style={styles.subtitle}>
         Click letters (or use your keyboard) to build text.
       </p>
 
+      
       <input
         value={text}
         readOnly
-        placeholder="Type here..."
+        placeholder="Your text will appear here..."
         style={styles.input}
       />
 
+      
       <button
         style={styles.backspace}
         onClick={() => setText((prev) => prev.slice(0, -1))}
@@ -44,6 +49,7 @@ export default function App() {
         Backspace
       </button>
 
+      
       <div style={styles.grid}>
         {letters.map((l) => (
           <button
@@ -78,9 +84,9 @@ const styles = {
     marginBottom: "25px",
   },
   input: {
-    width: "80%",
+    width: "90%",
     padding: "15px",
-    fontSize: "20px",
+    fontSize: "18px",
     borderRadius: "10px",
     border: "1px solid #ccc",
     marginBottom: "20px",
@@ -108,6 +114,6 @@ const styles = {
     fontSize: "20px",
     fontWeight: "bold",
     cursor: "pointer",
-    boxShadow: "0 2px 6px rgba(0,0,0,0.1)",
+    boxShadow: "0 2px 6px rgba(0, 0, 0, 0.1)",
   },
 };
