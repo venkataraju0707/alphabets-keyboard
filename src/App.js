@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from "react";
 
- const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
+const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
 
 export default function App() {
   const [text, setText] = useState("");
 
-  
   useEffect(() => {
     const handleKey = (e) => {
       const key = e.key.toUpperCase();
@@ -21,14 +20,12 @@ export default function App() {
 
     window.addEventListener("keydown", handleKey);
     return () => window.removeEventListener("keydown", handleKey);
-  }, []);  
+  }, []);
 
-  
   const addLetter = (letter) => {
     setText((prev) => prev + letter);
   };
 
-  
   const handleBackspace = () => {
     setText((prev) => prev.slice(0, -1));
   };
@@ -36,32 +33,29 @@ export default function App() {
   return (
     <div style={styles.container}>
       <h1 style={styles.title}>Alphabet Buttons</h1>
-      <p style={styles.subtitle}>
-        Click letters (or use your keyboard) to build text.
-      </p>
+      <p style={styles.subtitle}>Click letters (or use your keyboard) to build text.</p>
 
+      {/* This MUST match Cypress: .output */}
       <input
         type="text"
+        className="output"
         value={text}
-        placeholder="Your text will appear here..."
         readOnly
+        placeholder="Your text will appear here..."
         style={styles.input}
-        data-testid="output-area" 
       />
 
-      
       <button style={styles.backspace} onClick={handleBackspace}>
         Backspace
       </button>
 
-       
       <div style={styles.buttonsContainer}>
         {letters.map((letter) => (
           <button
             key={letter}
+            className="key"   // ✔ Cypress requires .key
             onClick={() => addLetter(letter)}
             style={styles.letterButton}
-            data-testid="alphabet-button"  
           >
             {letter}
           </button>
@@ -71,53 +65,45 @@ export default function App() {
   );
 }
 
- 
 const styles = {
   container: {
     textAlign: "center",
     padding: "40px",
-    fontFamily: "Arial, sans-serif",
+    fontFamily: "Arial",
   },
-  title: {
-    fontSize: "36px",
-    fontWeight: "bold",
-  },
-  subtitle: {
-    fontSize: "16px",
-    color: "#555",
-  },
+  title: { fontSize: "36px", fontWeight: "bold", marginBottom: "5px" },
+  subtitle: { fontSize: "16px", color: "#555", marginBottom: "25px" },
   input: {
     width: "80%",
     padding: "14px",
     fontSize: "18px",
-    marginTop: "20px",
     borderRadius: "8px",
     border: "1px solid #ccc",
+    marginBottom: "20px",
   },
   backspace: {
-    marginTop: "20px",
-    marginBottom: "20px",
     padding: "10px 16px",
     fontSize: "15px",
     borderRadius: "8px",
     cursor: "pointer",
+    marginBottom: "30px",
   },
   buttonsContainer: {
     display: "flex",
     flexWrap: "wrap",
     width: "80%",
-    justifyContent: "center",
     margin: "20px auto",
     gap: "15px",
+    justifyContent: "center",
   },
   letterButton: {
     padding: "18px 22px",
     fontSize: "18px",
-    border: "1px solid #ccc",
     borderRadius: "10px",
+    border: "1px solid #ccc",
     cursor: "pointer",
+    background: "#fff",
     width: "60px",
     textAlign: "center",
-    background: "white",
   },
 };
