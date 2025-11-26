@@ -1,15 +1,17 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 
 export default function App() {
   const [text, setText] = useState("");
 
   const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
 
-   useEffect(() => {
+   const lettersRef = useRef(letters);
+
+  useEffect(() => {
     const handleKey = (e) => {
       const key = e.key.toUpperCase();
 
-      if (letters.includes(key)) {
+      if (lettersRef.current.includes(key)) {
         setText((prev) => prev + key);
       }
 
@@ -20,8 +22,7 @@ export default function App() {
 
     window.addEventListener("keydown", handleKey);
     return () => window.removeEventListener("keydown", handleKey);
-  }, []);
-
+  }, []);  
   return (
     <div style={styles.container}>
       <h1 style={styles.title}>Alphabet Buttons</h1>
@@ -58,7 +59,7 @@ export default function App() {
   );
 }
 
- const styles = {
+const styles = {
   container: {
     textAlign: "center",
     padding: "40px",
