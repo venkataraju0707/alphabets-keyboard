@@ -35,17 +35,16 @@ export default function App() {
       <h1 style={styles.title}>Alphabet Buttons</h1>
       <p style={styles.subtitle}>Click letters (or use your keyboard) to build text.</p>
 
-      {/* This MUST match Cypress: .output */}
-      <input
-        type="text"
-        className="output"
-        value={text}
-        readOnly
-        placeholder="Your text will appear here..."
-        style={styles.input}
-      />
+      {/* Cypress expects .output to be readable with contain() */}
+      <div className="output" style={styles.outputBox}>
+        {text}
+      </div>
 
-      <button style={styles.backspace} onClick={handleBackspace}>
+      <button
+        className="backspace"    // ✔ required for Cypress
+        style={styles.backspace}
+        onClick={handleBackspace}
+      >
         Backspace
       </button>
 
@@ -53,7 +52,7 @@ export default function App() {
         {letters.map((letter) => (
           <button
             key={letter}
-            className="key"   // ✔ Cypress requires .key
+            className="key"  // ✔ Cypress uses this!
             onClick={() => addLetter(letter)}
             style={styles.letterButton}
           >
@@ -73,14 +72,19 @@ const styles = {
   },
   title: { fontSize: "36px", fontWeight: "bold", marginBottom: "5px" },
   subtitle: { fontSize: "16px", color: "#555", marginBottom: "25px" },
-  input: {
+
+  outputBox: {
     width: "80%",
+    minHeight: "40px",
     padding: "14px",
     fontSize: "18px",
     borderRadius: "8px",
     border: "1px solid #ccc",
     marginBottom: "20px",
+    background: "#fff",
+    textAlign: "left",
   },
+
   backspace: {
     padding: "10px 16px",
     fontSize: "15px",
@@ -88,6 +92,7 @@ const styles = {
     cursor: "pointer",
     marginBottom: "30px",
   },
+
   buttonsContainer: {
     display: "flex",
     flexWrap: "wrap",
